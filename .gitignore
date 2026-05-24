@@ -24,3 +24,5 @@ logs
 !.env.example
 
 assess_criteria.md
+API_DESIGN.md
+CLAUDE.md
