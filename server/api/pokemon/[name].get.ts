@@ -32,7 +32,23 @@ export default defineEventHandler(async (event): Promise<PokemonDetail> => {
     })
   }
 
-  const raw = await $fetch<RawPokemon>(`${POKEAPI_BASE}/${name}`)
+  let raw: RawPokemon
+
+  try {
+    raw = await $fetch<RawPokemon>(`${POKEAPI_BASE}/${name}`)
+  } catch (error: unknown) {
+    const statusCode = (error as { statusCode?: number }).statusCode
+    if (statusCode === 404) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: `Pokemon "${name}" not found`
+      })
+    }
+    throw createError({
+      statusCode: 502,
+      statusMessage: 'Failed to fetch from PokeAPI'
+    })
+  }
 
   return {
     id: raw.id,
