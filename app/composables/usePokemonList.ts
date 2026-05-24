@@ -4,12 +4,13 @@ const PAGE_SIZE = 60
 
 // Manages pokemon list state: fetching, client-side search filtering, and load-more pagination.
 // Search filters only what's already loaded — does not trigger new API calls.
+// Uses useState for pokemon/offset/hasMore so state persists across navigations.
 export function usePokemonList() {
-  const pokemon = ref<PokemonListItem[]>([])
+  const pokemon = useState<PokemonListItem[]>('pokemon-list', () => [])
+  const offset = useState<number>('pokemon-offset', () => 0)
+  const hasMore = useState<boolean>('pokemon-has-more', () => true)
   const search = ref('')
   const loading = ref(false)
-  const hasMore = ref(true)
-  const offset = ref(0)
 
   const filteredPokemon = computed(() => {
     if (!search.value) return pokemon.value
@@ -33,8 +34,10 @@ export function usePokemonList() {
     }
   }
 
-  // Fetch first page on init
-  fetchPage()
+  // Only fetch first page if we have no data yet
+  if (pokemon.value.length === 0) {
+    fetchPage()
+  }
 
   return {
     pokemon: filteredPokemon,

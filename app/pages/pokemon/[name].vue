@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const router = useRouter()
 const route = useRoute()
 const name = route.params.name as string
 const { pokemon, loading, error } = usePokemonDetail(name)
@@ -6,7 +7,7 @@ const { pokemon, loading, error } = usePokemonDetail(name)
 
 <template>
   <main>
-    <NuxtLink to="/" class="back-link">&larr; Back</NuxtLink>
+    <button class="back-link" @click="router.back()">&larr; Back</button>
 
     <p v-if="loading" class="loading-state">Loading...</p>
     <p v-else-if="error" class="error-state">{{ error.message }}</p>
