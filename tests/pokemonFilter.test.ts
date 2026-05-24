@@ -4,13 +4,18 @@ import type { PokemonListItem } from '../app/types/pokemon'
 
 // Replicates the filtering logic from usePokemonList to test in isolation
 // without needing Nuxt context (useState, $fetch).
-function createFilter(items: PokemonListItem[]) {
+function createFilter(items: PokemonListItem[], favoriteIds: number[] = []) {
   const pokemon = ref(items)
   const search = ref('')
   const typeFilter = ref('')
+  const favorites = ref(favoriteIds)
+  const showFavoritesOnly = ref(false)
 
   const filtered = computed(() => {
     let result = pokemon.value
+    if (showFavoritesOnly.value) {
+      result = result.filter((p) => favorites.value.includes(p.id))
+    }
     if (search.value) {
       const term = search.value.toLowerCase()
       result = result.filter((p) => p.name.includes(term))
@@ -21,7 +26,7 @@ function createFilter(items: PokemonListItem[]) {
     return result
   })
 
-  return { filtered, search, typeFilter }
+  return { filtered, search, typeFilter, favorites, showFavoritesOnly }
 }
 
 const mockPokemon: PokemonListItem[] = [
@@ -77,5 +82,51 @@ describe('pokemon filtering', () => {
     const { filtered, typeFilter } = createFilter(mockPokemon)
     typeFilter.value = 'dragon'
     expect(filtered.value).toHaveLength(0)
+  })
+})
+
+describe('favorites filtering', () => {
+  it('shows only favorited pokemon when favorites toggle is active', () => {
+    const { filtered, showFavoritesOnly } = createFilter(mockPokemon, [1, 25])
+    showFavoritesOnly.value = true
+    expect(filtered.value).toHaveLength(2)
+    expect(filtered.value.map((p) => p.name)).toEqual(['bulbasaur', 'pikachu'])
+  })
+
+  it('shows all pokemon when favorites toggle is off', () => {
+    const { filtered, showFavoritesOnly } = createFilter(mockPokemon, [1, 25])
+    showFavoritesOnly.value = false
+    expect(filtered.value).toHaveLength(5)
+  })
+
+  it('returns empty when no favorites exist and toggle is on', () => {
+    const { filtered, showFavoritesOnly } = createFilter(mockPokemon, [])
+    showFavoritesOnly.value = true
+    expect(filtered.value).toHaveLength(0)
+  })
+
+  it('combines favorites with name search', () => {
+    const { filtered, showFavoritesOnly, search } = createFilter(mockPokemon, [1, 4, 6])
+    showFavoritesOnly.value = true
+    search.value = 'char'
+    expect(filtered.value).toHaveLength(2)
+    expect(filtered.value.map((p) => p.name)).toEqual(['charmander', 'charizard'])
+  })
+
+  it('combines favorites with type filter', () => {
+    const { filtered, showFavoritesOnly, typeFilter } = createFilter(mockPokemon, [4, 6, 25])
+    showFavoritesOnly.value = true
+    typeFilter.value = 'fire'
+    expect(filtered.value).toHaveLength(2)
+    expect(filtered.value.map((p) => p.name)).toEqual(['charmander', 'charizard'])
+  })
+
+  it('combines all three filters', () => {
+    const { filtered, showFavoritesOnly, search, typeFilter } = createFilter(mockPokemon, [1, 4, 6, 7])
+    showFavoritesOnly.value = true
+    search.value = 'char'
+    typeFilter.value = 'flying'
+    expect(filtered.value).toHaveLength(1)
+    expect(filtered.value[0]?.name).toBe('charizard')
   })
 })

@@ -17,3 +17,10 @@ globalThis.useTypeEffectiveness = vi.fn(() => ({
   loading: ref(false),
   error: ref(null)
 }))
+
+globalThis.useFavorites = vi.fn(() => ({
+  favorites: ref([]),
+  showFavoritesOnly: ref(false),
+  toggle: vi.fn(),
+  isFavorite: vi.fn(() => false)
+}))
