@@ -3,6 +3,7 @@ import { typeColors } from '~/utils/typeColors'
 
 const search = defineModel<string>('search', { default: '' })
 const typeFilter = defineModel<string>('typeFilter', { default: '' })
+const showFavoritesOnly = defineModel<boolean>('showFavoritesOnly', { default: false })
 
 const types = Object.keys(typeColors)
 const dropdownOpen = ref(false)
@@ -36,12 +37,30 @@ onUnmounted(() => {
 
 <template>
   <div class="search-bar">
-    <input
-      v-model="search"
-      type="text"
-      placeholder="Search Pokémon..."
-      class="search-bar__input"
-    />
+    <div class="search-bar__input-wrapper">
+      <input
+        v-model="search"
+        type="text"
+        placeholder="Search Pokémon..."
+        class="search-bar__input"
+      />
+      <button
+        v-if="search"
+        class="search-bar__clear"
+        aria-label="Clear search"
+        @click="search = ''"
+      >
+        &times;
+      </button>
+    </div>
+    <button
+      class="search-bar__fav-toggle"
+      :class="{ 'search-bar__fav-toggle--active': showFavoritesOnly }"
+      :aria-label="showFavoritesOnly ? 'Show all' : 'Show favorites only'"
+      @click="showFavoritesOnly = !showFavoritesOnly"
+    >
+      &hearts; Favorites
+    </button>
     <div ref="dropdownRef" class="dropdown">
       <button
         class="dropdown__trigger"
@@ -82,9 +101,14 @@ onUnmounted(() => {
   gap: var(--spacing-sm);
 }
 
-.search-bar__input {
+.search-bar__input-wrapper {
   flex: 1;
-  padding: var(--spacing-sm) var(--spacing-md);
+  position: relative;
+}
+
+.search-bar__input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-md);
   font-size: 1rem;
   color: var(--color-text);
   background-color: var(--color-surface);
@@ -101,6 +125,44 @@ onUnmounted(() => {
 .search-bar__input:focus {
   border-color: var(--color-input-focus);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.search-bar__clear {
+  position: absolute;
+  right: var(--spacing-xs);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+  padding: 0.15rem 0.35rem;
+  line-height: 1;
+  border-radius: 50%;
+  transition: color var(--transition), background-color var(--transition);
+}
+
+.search-bar__clear:hover {
+  color: var(--color-text);
+  background-color: var(--color-border);
+}
+
+.search-bar__fav-toggle {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.search-bar__fav-toggle:hover {
+  border-color: var(--color-input-focus);
+}
+
+.search-bar__fav-toggle--active {
+  color: #ef4444;
+  border-color: #ef4444;
 }
 
 .dropdown {
@@ -129,7 +191,7 @@ onUnmounted(() => {
 }
 
 .dropdown__chevron {
-  font-size: 0.75rem;
+  font-size: 1.1rem;
   transition: transform var(--transition);
 }
 

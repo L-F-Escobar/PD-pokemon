@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const { pokemon, search, typeFilter, loading, hasMore, loadMore } = usePokemonList()
+const { pokemon, search, typeFilter, showFavoritesOnly, loading, hasMore, loadMore } = usePokemonList()
 
-const isFiltering = computed(() => search.value || typeFilter.value)
+const isFiltering = computed(() => search.value || typeFilter.value || showFavoritesOnly.value)
 </script>
 
 <template>
   <main>
-    <SearchFilter v-model:search="search" v-model:type-filter="typeFilter" />
+    <SearchFilter v-model:search="search" v-model:type-filter="typeFilter" v-model:show-favorites-only="showFavoritesOnly" />
 
     <div v-if="pokemon.length" class="pokemon-grid">
       <PokemonCard

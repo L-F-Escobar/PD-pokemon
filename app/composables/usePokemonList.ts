@@ -12,9 +12,13 @@ export function usePokemonList() {
   const search = ref('')
   const typeFilter = ref('')
   const loading = ref(false)
+  const { favorites, showFavoritesOnly } = useFavorites()
 
   const filteredPokemon = computed(() => {
     let result = pokemon.value
+    if (showFavoritesOnly.value) {
+      result = result.filter((p) => favorites.value.includes(p.id))
+    }
     if (search.value) {
       const term = search.value.toLowerCase()
       result = result.filter((p) => p.name.includes(term))
@@ -50,6 +54,7 @@ export function usePokemonList() {
     pokemon: filteredPokemon,
     search,
     typeFilter,
+    showFavoritesOnly,
     loading,
     hasMore,
     loadMore: fetchPage
