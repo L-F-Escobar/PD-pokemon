@@ -5,6 +5,8 @@ A Pokémon information site built with Nuxt 4, TypeScript, and the PokéAPI.
 ## Setup
 
 ```bash
+git clone https://github.com/L-F-Escobar/PD-pokemon.git
+cd PD-pokemon
 npm install
 npm run dev
 ```
