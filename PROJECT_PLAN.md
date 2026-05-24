@@ -125,13 +125,14 @@
 - Loading + empty + error states styled consistently
 - Colored type badges on profile page (canonical pokemon type colors)
 - Back to Top button (fixed, appears on scroll, smooth scroll)
+- Scroll position restoration via router.options.ts + router.back()
+- useState for list persistence across navigations
+- Tab title (Pokédex) + pokeball favicon
 
 ## Phase 4
-**Goal: Polish + tests + bonus features.**
+**Goal: Bonus features + tests.**
 - Implement `useFavorites` composable + `FavoriteToggle` component
-- Implement load-more pagination
 - Write remaining Vitest tests (API mock test, composable filter test, component integration test)
-- Add error handling for network failures
 - Keyboard navigation through grid
 
 ## Phase 5
