@@ -10,12 +10,19 @@ export function usePokemonList() {
   const offset = useState<number>('pokemon-offset', () => 0)
   const hasMore = useState<boolean>('pokemon-has-more', () => true)
   const search = ref('')
+  const typeFilter = ref('')
   const loading = ref(false)
 
   const filteredPokemon = computed(() => {
-    if (!search.value) return pokemon.value
-    const term = search.value.toLowerCase()
-    return pokemon.value.filter((p) => p.name.includes(term))
+    let result = pokemon.value
+    if (search.value) {
+      const term = search.value.toLowerCase()
+      result = result.filter((p) => p.name.includes(term))
+    }
+    if (typeFilter.value) {
+      result = result.filter((p) => p.types.includes(typeFilter.value))
+    }
+    return result
   })
 
   async function fetchPage() {
@@ -42,6 +49,7 @@ export function usePokemonList() {
   return {
     pokemon: filteredPokemon,
     search,
+    typeFilter,
     loading,
     hasMore,
     loadMore: fetchPage
