@@ -113,13 +113,18 @@
 - Verify all required spec items work
 
 ## Phase 3
-**Goal: Styling pass + accessibility basics.**
-- Plain CSS, scoped per component
-- Desktop-first layout
+**Goal: Theme system, styling, and accessibility.**
+- Global theme via CSS custom properties (colors, spacing, typography)
+- Dark/light mode with toggle, persisted to localStorage via `useTheme` composable
+- Theme toggle component in header
+- Desktop-first layout with max-width container
+- Plain CSS, scoped per component, referencing theme variables
 - Semantic HTML (proper headings, `<main>`, `<nav>`, etc.)
 - Alt text on images
-- Focus states on interactive elements
-- Loading + empty + error states
+- Focus/hover states on interactive elements
+- Loading + empty + error states styled consistently
+- Colored type badges on profile page (canonical pokemon type colors)
+- Back to Top button (fixed, appears on scroll, smooth scroll)
 
 ## Phase 4
 **Goal: Polish + tests + bonus features.**

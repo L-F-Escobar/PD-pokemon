@@ -5,6 +5,14 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/eslint'],
 
+  app: {
+    head: {
+      title: 'Pokédex'
+    }
+  },
+
+  css: ['~/assets/css/global.css'],
+
   typescript: {
     strict: true,
     typeCheck: true

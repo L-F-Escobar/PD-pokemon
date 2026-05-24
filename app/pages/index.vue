@@ -4,7 +4,6 @@ const { pokemon, search, loading, hasMore, loadMore } = usePokemonList()
 
 <template>
   <main>
-    <h1>Pokémon Explorer</h1>
     <SearchFilter v-model="search" />
 
     <div v-if="pokemon.length" class="pokemon-grid">
@@ -15,9 +14,9 @@ const { pokemon, search, loading, hasMore, loadMore } = usePokemonList()
       />
     </div>
 
-    <p v-else-if="search">No Pokémon found.</p>
+    <p v-else-if="search" class="empty-state">No Pokémon found.</p>
 
-    <p v-if="loading">Loading...</p>
+    <p v-if="loading" class="loading-state">Loading...</p>
 
     <button
       v-if="hasMore && !search"
@@ -29,3 +28,42 @@ const { pokemon, search, loading, hasMore, loadMore } = usePokemonList()
     </button>
   </main>
 </template>
+
+<style scoped>
+.pokemon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.load-more {
+  display: block;
+  margin: var(--spacing-xl) auto;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transition: background-color var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.load-more:hover:not(:disabled) {
+  background-color: var(--color-border);
+  transform: translateY(-1px);
+}
+
+.load-more:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.empty-state,
+.loading-state {
+  text-align: center;
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-xl);
+  font-size: 1.1rem;
+}
+</style>
