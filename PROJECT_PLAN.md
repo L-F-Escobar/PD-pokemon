@@ -131,9 +131,17 @@
 
 ## Phase 4
 **Goal: Bonus features + tests.**
+- Expand detail route: add stats, cries, base_experience (free — already in REST response)
+- Build stats bar chart on profile page (pure CSS horizontal bars, color-coded)
+- Add play cry button on profile page
+- Lazy-load evolution chain (separate fetch, renders after main profile)
+- Lazy-load type effectiveness (combined dual-type damage calculations)
+- Type filter dropdown on landing page (custom dropdown, not native `<select>`)
+- Two-column profile layout (Details + Base Stats side by side, full-width sections below)
+- Shiny sprite toggle on profile image (swaps normal/shiny artwork, zero API calls)
+- Pokemon ID badge next to name (#001, #149, etc.)
 - Implement `useFavorites` composable + `FavoriteToggle` component
 - Write remaining Vitest tests (API mock test, composable filter test, component integration test)
-- Keyboard navigation through grid
 
 ## Phase 5
 **Goal: README + commit cleanup + final pass.**

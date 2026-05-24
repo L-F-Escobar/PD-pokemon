@@ -1,10 +1,12 @@
 <script setup lang="ts">
-const { pokemon, search, loading, hasMore, loadMore } = usePokemonList()
+const { pokemon, search, typeFilter, showFavoritesOnly, loading, hasMore, loadMore } = usePokemonList()
+
+const isFiltering = computed(() => search.value || typeFilter.value || showFavoritesOnly.value)
 </script>
 
 <template>
   <main>
-    <SearchFilter v-model="search" />
+    <SearchFilter v-model:search="search" v-model:type-filter="typeFilter" v-model:show-favorites-only="showFavoritesOnly" />
 
     <div v-if="pokemon.length" class="pokemon-grid">
       <PokemonCard
@@ -14,12 +16,12 @@ const { pokemon, search, loading, hasMore, loadMore } = usePokemonList()
       />
     </div>
 
-    <p v-else-if="search" class="empty-state">No Pokémon found.</p>
+    <p v-else-if="isFiltering" class="empty-state">No Pokémon found.</p>
 
     <p v-if="loading" class="loading-state">Loading...</p>
 
     <button
-      v-if="hasMore && !search"
+      v-if="hasMore && !isFiltering"
       :disabled="loading"
       class="load-more"
       @click="loadMore"

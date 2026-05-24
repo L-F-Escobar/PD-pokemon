@@ -16,13 +16,26 @@ interface RawType {
   type: { name: string }
 }
 
+interface RawStat {
+  base_stat: number
+  stat: { name: string }
+}
+
+interface RawCries {
+  latest: string
+  legacy: string
+}
+
 interface RawPokemon {
   id: number
   name: string
   height: number
   weight: number
+  base_experience: number
   abilities: RawAbility[]
   types: RawType[]
+  stats: RawStat[]
+  cries: RawCries
 }
 
 export default defineEventHandler(async (event): Promise<PokemonDetail> => {
@@ -58,6 +71,7 @@ export default defineEventHandler(async (event): Promise<PokemonDetail> => {
     name: raw.name,
     height: raw.height,
     weight: raw.weight,
+    base_experience: raw.base_experience,
     sprite: `${ARTWORK_BASE}/${raw.id}.png`,
     abilities: raw.abilities.map((a) => ({
       name: a.ability.name,
@@ -65,6 +79,11 @@ export default defineEventHandler(async (event): Promise<PokemonDetail> => {
     })),
     types: raw.types
       .sort((a, b) => a.slot - b.slot)
-      .map((t) => t.type.name)
+      .map((t) => t.type.name),
+    stats: raw.stats.map((s) => ({
+      name: s.stat.name,
+      base_stat: s.base_stat
+    })),
+    cries: raw.cries
   }
 })
