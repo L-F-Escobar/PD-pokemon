@@ -1,3 +1,6 @@
+// Fetches paginated pokemon list via PokeAPI GraphQL.
+// GraphQL chosen over REST here to avoid N+1 calls — one query returns
+// exactly the fields needed for 60 pokemon (id, name, types).
 import type { PokemonListItem } from '~/types/pokemon'
 
 const GRAPHQL_URL = 'https://graphql.pokeapi.co/v1beta2'

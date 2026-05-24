@@ -1,3 +1,6 @@
+// Fetches single pokemon detail via PokeAPI REST.
+// REST used here since it's a single fetch per page view — reliable and no rate limit concern.
+// Response is stripped down from ~100KB to only the fields the client needs.
 import type { PokemonDetail } from '~/types/pokemon'
 
 const POKEAPI_BASE = 'https://pokeapi.co/api/v2/pokemon'
