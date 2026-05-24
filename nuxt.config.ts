@@ -5,6 +5,8 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/eslint'],
 
+  css: ['~/assets/css/global.css'],
+
   typescript: {
     strict: true,
     typeCheck: true
