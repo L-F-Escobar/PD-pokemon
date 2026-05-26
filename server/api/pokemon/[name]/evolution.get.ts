@@ -3,6 +3,9 @@
 // 2. evolution-chain/{id} → get the chain data
 // This is a separate endpoint so the main detail route stays fast.
 
+import { consola } from 'consola'
+
+const logger = consola.withTag('api:pokemon:evolution')
 const POKEAPI_BASE = 'https://pokeapi.co/api/v2'
 const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
 
@@ -49,15 +52,21 @@ export default defineEventHandler(async (event): Promise<EvolutionStage[]> => {
     })
   }
 
+  logger.info(`Fetching evolution chain for: ${name}`)
+
   try {
     const species = await $fetch<{ evolution_chain: { url: string } }>(
       `${POKEAPI_BASE}/pokemon-species/${name}`
     )
 
     const chain = await $fetch<{ chain: ChainLink }>(species.evolution_chain.url)
+    const stages = flattenChain(chain.chain)
 
-    return flattenChain(chain.chain)
+    logger.info(`Evolution chain for ${name}: ${stages.map((s) => s.name).join(' → ')}`)
+
+    return stages
   } catch {
+    logger.error(`Failed to fetch evolution chain for: ${name}`)
     throw createError({
       statusCode: 502,
       statusMessage: 'Failed to fetch evolution chain'

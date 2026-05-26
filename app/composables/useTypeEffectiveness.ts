@@ -1,7 +1,8 @@
 interface TypeEffectiveness {
-  weaknesses: string[]
-  resistances: string[]
   immunities: string[]
+  superEffective: string[]
+  notVeryEffective: string[]
+  noEffect: string[]
 }
 
 // Lazy-loads combined type effectiveness data separately from the main profile fetch.

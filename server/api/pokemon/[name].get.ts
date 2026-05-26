@@ -1,7 +1,10 @@
 // Fetches single pokemon detail via PokeAPI REST.
 // REST used here since it's a single fetch per page view — reliable and no rate limit concern.
 // Response is stripped down from ~100KB to only the fields the client needs.
+import { consola } from 'consola'
 import type { PokemonDetail } from '~/types/pokemon'
+
+const logger = consola.withTag('api:pokemon:detail')
 
 const POKEAPI_BASE = 'https://pokeapi.co/api/v2/pokemon'
 const ARTWORK_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork'
@@ -48,6 +51,8 @@ export default defineEventHandler(async (event): Promise<PokemonDetail> => {
     })
   }
 
+  logger.info(`Fetching detail for: ${name}`)
+
   let raw: RawPokemon
 
   try {
@@ -55,16 +60,20 @@ export default defineEventHandler(async (event): Promise<PokemonDetail> => {
   } catch (error: unknown) {
     const statusCode = (error as { statusCode?: number }).statusCode
     if (statusCode === 404) {
+      logger.warn(`Pokemon not found: ${name}`)
       throw createError({
         statusCode: 404,
         statusMessage: `Pokemon "${name}" not found`
       })
     }
+    logger.error(`Failed to fetch from PokeAPI for: ${name}`)
     throw createError({
       statusCode: 502,
       statusMessage: 'Failed to fetch from PokeAPI'
     })
   }
+
+  logger.info(`Returning detail for: ${name} (id=${raw.id})`)
 
   return {
     id: raw.id,

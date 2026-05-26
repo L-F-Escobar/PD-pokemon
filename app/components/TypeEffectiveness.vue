@@ -16,39 +16,53 @@ const { effectiveness, loading, error } = useTypeEffectiveness(props.name)
     <p v-else-if="error" class="type-effectiveness__error">Could not load type effectiveness.</p>
 
     <template v-else-if="effectiveness">
-      <div v-if="effectiveness.weaknesses.length" class="type-effectiveness__group">
-        <h3>Weak Against</h3>
-        <div class="type-effectiveness__badges">
-          <span
-            v-for="type in effectiveness.weaknesses"
-            :key="type"
-            class="type-badge"
-            :style="{ backgroundColor: typeColors[type] }"
-          >
-            {{ type }}
-          </span>
-        </div>
-      </div>
-
-      <div v-if="effectiveness.resistances.length" class="type-effectiveness__group">
-        <h3>Resistant To</h3>
-        <div class="type-effectiveness__badges">
-          <span
-            v-for="type in effectiveness.resistances"
-            :key="type"
-            class="type-badge"
-            :style="{ backgroundColor: typeColors[type] }"
-          >
-            {{ type }}
-          </span>
-        </div>
-      </div>
-
       <div v-if="effectiveness.immunities.length" class="type-effectiveness__group">
         <h3>Immune To</h3>
         <div class="type-effectiveness__badges">
           <span
             v-for="type in effectiveness.immunities"
+            :key="type"
+            class="type-badge"
+            :style="{ backgroundColor: typeColors[type] }"
+          >
+            {{ type }}
+          </span>
+        </div>
+      </div>
+
+      <div v-if="effectiveness.superEffective.length" class="type-effectiveness__group">
+        <h3>Super Effective Against</h3>
+        <div class="type-effectiveness__badges">
+          <span
+            v-for="type in effectiveness.superEffective"
+            :key="type"
+            class="type-badge"
+            :style="{ backgroundColor: typeColors[type] }"
+          >
+            {{ type }}
+          </span>
+        </div>
+      </div>
+
+      <div v-if="effectiveness.notVeryEffective.length" class="type-effectiveness__group">
+        <h3>Not Very Effective Against</h3>
+        <div class="type-effectiveness__badges">
+          <span
+            v-for="type in effectiveness.notVeryEffective"
+            :key="type"
+            class="type-badge"
+            :style="{ backgroundColor: typeColors[type] }"
+          >
+            {{ type }}
+          </span>
+        </div>
+      </div>
+
+      <div v-if="effectiveness.noEffect.length" class="type-effectiveness__group">
+        <h3>No Effect On</h3>
+        <div class="type-effectiveness__badges">
+          <span
+            v-for="type in effectiveness.noEffect"
             :key="type"
             class="type-badge"
             :style="{ backgroundColor: typeColors[type] }"
