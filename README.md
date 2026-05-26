@@ -81,10 +81,12 @@ CSS custom properties on `:root` with a `[data-theme="dark"]` override. A `useTh
 - **Lazy-loaded profile sections** — evolution chain and type effectiveness require extra API calls. Main profile renders instantly; secondary data loads in the background.
 - **Custom dropdown over native `<select>`** — full control over dropdown direction and styling. Includes colored type dots and matches the theme system.
 - **No styling library** — plain CSS with custom properties. Scoped per component, themed via variables.
+- **Scoped server logging** — `consola` with tagged loggers per route. Logs requests, response summaries, and errors to the dev terminal.
 
 ## What I'd Add With More Time
 
 - Caching layer in server routes (in-memory LRU) to reduce PokéAPI calls
+- Request instrumentation (duration headers, upstream call counts, client-side performance marks)
 - E2E tests with Playwright
 - CI/CD via GitHub Actions
 - Pokémon comparison feature
